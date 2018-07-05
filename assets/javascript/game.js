@@ -9,7 +9,7 @@
 //RESTART FUNCITON
 var playerName = " ";
 var characters = [
-    { name: "Picard", health: 100, attack: 10, counter: 10, image: "assets/images/Picard.jpg", alive: true },
+    { name: "Picard", health: 100, attack: 1, counter: 10, image: "assets/images/Picard.jpg", alive: true },
     { name: "Sisko", health: 100, attack: 10, counter: 10, image: "assets/images/Sisko.jpg", alive: true },
     { name: "Janeway", health: 100, attack: 10, counter: 10, image: "assets/images/Janeway.jpg", alive: true },
     { name: "Kirk", health: 100, attack: 10, counter: 10, image: "assets/images/Kirk.jpg", alive: true },
@@ -18,7 +18,7 @@ var characters = [
 var hero;
 var opp;
 var attackPower = 0;
-var attackPowerIncrement=0;
+var attackPowerIncrement = 0;
 var counterPower = 0;
 var heroHealth = 0;
 var heroMaxHealth = 0;
@@ -107,10 +107,11 @@ function chooseHero() {
                 $("#" + hero).delay(0).fadeIn();
                 $("#" + hero).delay(200).animate({ width: "40%" });
                 $("#" + hero).delay(300).animate({ width: "20%" });
-                attackPower = characters[characters.findIndex(x => x.name == hero)].attack;
-                attackPowerIncrement = characters[characters.findIndex(x => x.name == hero)].attack;
-                heroMaxHealth=characters[characters.findIndex(x => x.name == hero)].health;
-                heroHealth=characters[characters.findIndex(x => x.name == hero)].health;
+                heroIndex = characters[characters.findIndex(x => x.name == hero)]
+                attackPower = heroIndex.attack;
+                attackPowerIncrement = heroIndex.attack;
+                heroMaxHealth = heroIndex.health;
+                heroHealth = heroIndex.health;
                 // console.log("attackpower", attackPower);
                 setTimeout(chooseOpponent, 2500);
 
@@ -121,50 +122,73 @@ function chooseHero() {
 
 
 }
+
+
 function chooseOpponent() {
 
     console.log("chooseOpponent called");
     $("#choice-1").css("text-align", "right");
     $("#choice-1").text("Please choose your opponent");
-    $("#container").append("<div id='opponent-col' style ='float:right; width:50%'></div>")
+    if ($("#opponent-col").length) {
 
+    } else {
+        $("#container").append("<div id='opponent-col' style ='float:right; width:50%'></div>")
+    }
     $(characters).each(function (image, val) {
         if (val.name != hero) {
+            pictureName = "#" + val.name;
             if (this.alive == true) {
-                imgVal = '<img style="width: 40%; clear:both" id = "' + val.name + '" class = "headshot" src = "' + val.image + '"</img> ';
-                $("#opponent-col").append(imgVal);
+
+                // imgVal = '<img style="width: 40%; clear:both" id = "' + val.name + '" class = "headshot" src = "' + val.image + '"</img> ';
+
+
+                $(pictureName).appendTo("#opponent-col");
+                $(pictureName).css("width", "40%");
+                $(pictureName).fadeTo("slow", 1);
             } else {
-                imgVal = '<img style="width: 40%; clear:both; opacity:0.4" id = "' + val.name + '" class = "headshot" src = "' + val.image + '"</img> ';
-                $("#opponent-col").append(imgVal);
+                // imgVal = '<img style="width: 40%; clear:both; opacity:0.4" id = "' + val.name + '" class = "headshot" src = "' + val.image + '"</img> ';
+                $(pictureName).appendTo("#opponent-col");
+                $(pictureName).css("width", "40%").css("opacity", ".2").css("background","red");
+                $(pictureName).css("float","left").css("background-size", "cover");
+                $(pictureName).fadeIn();
             }
         }
     })
+
     $('#opponent-col').on('click', function (event) {
-        if (event.target != this) {
+        console.log(event.target);
+        console.log(event.target.tagName);
+        if (event.target.tagName == "IMG") {
             if (opp == null) {
                 selected = $(event.target).attr("id");
+
                 isAlive = characters[characters.findIndex(x => x.name == selected)].alive;
 
                 if (isAlive == true) {
                     opp = selected;
-                    console.log(isAlive);
                     console.log("Opponent Chosen", opp);
                     $('#opponent-col img').each(function (index) {
                         // console.log(this);
-                        $(this).fadeOut("slow");
+                        $(this).fadeTo("slow", 0.15);
+                        $(this).hide();
                     });
                     $("#choice-1").empty();
 
-                    $("#" + opp).delay(0).fadeIn();
+                    $("#" + opp).delay(0).fadeTo("fast", 1);
                     $("#" + opp).css("float", "right");
-                    $("#" + opp).delay(200).animate({ width: "40%" });
-                    $("#" + opp).delay(300).animate({ width: "20%" });
-                    counterPower = characters[characters.findIndex(x => x.name == opp)].counter;
-                    oppMaxHealth= characters[characters.findIndex(x => x.name == opp)].health;
-                    oppHealth= characters[characters.findIndex(x => x.name == opp)].health;
+
+
+                    // $("#" + opp).delay(200).animate({ width: "50%" });
+                    // $("#" + opp).delay(300).animate({ width: "40%" });
+                    oppIndex = characters[characters.findIndex(x => x.name == opp)]
+                    counterPower = oppIndex.counter;
+                    oppMaxHealth = oppIndex.health;
+                    oppHealth = oppIndex.health;
                     console.log("CounterPower =", counterPower);
                     addButton("ATTACK", 1);
                     addButton("RESET", 2);
+                    $("#" + opp).animate({ width: "71%" });
+                    $("#" + hero).animate({width: "35%"});
                     runGame();
 
 
@@ -175,6 +199,7 @@ function chooseOpponent() {
     });
 
 
+    console.log("chooseOpponent called");
 
 }
 
@@ -184,24 +209,57 @@ function runGame() {
     $("#button-1").click(function () {
         attackOpp();
     });
+    $("#button-2").click(function () {
+        hideButton("#button-1")
+        hideButton("#button-2")
+        opp = null;
+        hero = null;
+        $(characters).each(function (index) {
+            this.alive = true;
+            console.log(this.alive);
+        });
+
+        chooseHero();
+    });
 }
 
 function attackOpp() {
     console.log("Attacked");
-    oppHealth=oppHealth-attackPower;
-    heroHealth=heroHealth-counterPower;
-    attackPower=attackPower+ attackPowerIncrement;
-    if (heroHealth<=0){
+    oppHealth = oppHealth - attackPower;
+    heroHealth = heroHealth - counterPower;
+    attackPower = attackPower + attackPowerIncrement;
+    if (heroHealth <= 0) {
         heroDead();
     }
-    if (oppHealth<=0){
+    if (oppHealth <= 0) {
         oppDead();
     }
 }
-function heroDead(){
-    console.log(hero,"died");
+
+function heroDead() {
+    console.log(hero, "died");
+    hideButton("#button-1")
+    hideButton("#button-2")
+    hero = null;
+    opp = null;
+    $(characters).each(function (index) {
+        this.alive = true;
+    });
+
+    setTimeout(chooseHero, 2000);
 }
-function oppDead(){
+
+function oppDead() {
     console.log(opp, "died")
+    oppIndex.alive = false;
+    console.log(characters);
+    $("#" + opp).hide();
+    hideButton("#button-1");
+    hideButton("#button-2");
+    opp = null;
+    console.log(opp);
+    setTimeout(chooseOpponent, 1000);
+
+
 }
 

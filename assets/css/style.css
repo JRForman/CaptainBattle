@@ -130,3 +130,6 @@ body{
     
     z-index: 10;
 }
+#opponent-col{
+    z-index: 99;
+}
