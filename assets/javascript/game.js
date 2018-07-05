@@ -10,10 +10,10 @@
 var playerName = " ";
 var characters = [
     { name: "Picard", health: 100, attack: 1, counter: 10, image: "assets/images/Picard.jpg", alive: true },
-    { name: "Sisko", health: 100, attack: 10, counter: 10, image: "assets/images/Sisko.jpg", alive: true },
-    { name: "Janeway", health: 100, attack: 10, counter: 10, image: "assets/images/Janeway.jpg", alive: true },
-    { name: "Kirk", health: 100, attack: 10, counter: 10, image: "assets/images/Kirk.jpg", alive: true },
-    { name: "Archer", health: 100, attack: 10, counter: 10, image: "assets/images/Archer.jpg", alive: true },
+    { name: "Sisko", health: 100, attack: 10, counter: 10, image: "assets/images/sisko.jpg", alive: true },
+    { name: "Janeway", health: 100, attack: 10, counter: 10, image: "assets/images/janeway.jpg", alive: true },
+    { name: "Kirk", health: 100, attack: 10, counter: 10, image: "assets/images/kirk.jpg", alive: true },
+    { name: "Archer", health: 100, attack: 10, counter: 10, image: "assets/images/archer.jpg", alive: true },
 ];
 var hero;
 var opp;
