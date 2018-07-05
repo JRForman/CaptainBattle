@@ -176,7 +176,8 @@ function chooseOpponent() {
                         $(this).fadeTo("slow", 0.15);
                         $(this).hide();
                     });
-                    $("#choice-1").text("FIGHT!!!");
+                    $("#choice-1").text("Health: " +heroHealth);
+                    $("#choice-1").css("text-align", "left");
 
                     $("#" + opp).delay(0).fadeTo("fast", 1);
                     $("#" + opp).css("float", "right");
@@ -234,8 +235,7 @@ function attackOpp() {
     $("#" + opp).animate({ left: "0%" }, 500);
     $("#" + opp).css("z-height", "99");
     attackPower = attackPower + attackPowerIncrement;
-    console.log("Health:",heroHealth);
-    console.log("Attack:",attackPower);
+    $("#choice-1").text("Health: " +heroHealth);
     if (oppHealth <= 0) {
         oppDead();
     } else if (heroHealth <= 0) {
